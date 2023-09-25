@@ -1,0 +1,12 @@
+type Boosted = record {
+  type_ : text;
+  owner : principal;
+  days : nat64;
+  created_at : nat64;
+  blockheight : nat64;
+  identifier : principal;
+};
+service : {
+  boost : (principal, nat64) -> (opt nat64);
+  get_boosted_by_identifier : (principal) -> (opt Boosted) query;
+}

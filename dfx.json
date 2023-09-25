@@ -1,0 +1,10 @@
+{
+  "canisters": {
+    "boost": {
+      "type": "rust",
+      "package": "boost",
+      "candid": "candid/boost.did",
+      "wasm": "wasm/boost.wasm.gz"
+    }
+  }
+}
