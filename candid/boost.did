@@ -9,4 +9,5 @@ type Boosted = record {
 service : {
   boost : (principal, nat64) -> (opt nat64);
   get_boosted_by_identifier : (principal) -> (opt Boosted) query;
+  remove_boost : (principal) -> ();
 }

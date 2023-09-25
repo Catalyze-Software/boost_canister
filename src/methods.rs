@@ -48,7 +48,7 @@ async fn boost(identifier: Principal, blockheight: u64) -> Option<u64> {
                 });
                 set_timer(
                     Duration::from_secs(Store::get_seconds_from_days(existing.days)),
-                    move || remove_boost(&identifier),
+                    move || remove_boost(identifier),
                 );
                 return Some(existing.days);
             } else {
@@ -60,7 +60,7 @@ async fn boost(identifier: Principal, blockheight: u64) -> Option<u64> {
 
                 set_timer(
                     Duration::from_secs(Store::get_seconds_from_days(days)),
-                    move || remove_boost(&identifier),
+                    move || remove_boost(identifier),
                 );
                 return Some(days);
             }
@@ -69,7 +69,8 @@ async fn boost(identifier: Principal, blockheight: u64) -> Option<u64> {
     }
 }
 
-fn remove_boost(identifier: &Principal) {
+#[update]
+fn remove_boost(identifier: Principal) {
     BOOSTED.with(|p| p.borrow_mut().remove(&identifier.to_string()));
 }
 

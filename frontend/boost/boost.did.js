@@ -14,6 +14,7 @@ export const idlFactory = ({ IDL }) => {
         [IDL.Opt(Boosted)],
         ['query'],
       ),
+    'remove_boost' : IDL.Func([IDL.Principal], [], []),
   });
 };
 export const init = ({ IDL }) => { return []; };

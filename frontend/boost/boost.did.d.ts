@@ -12,4 +12,5 @@ export interface Boosted {
 export interface _SERVICE {
   'boost' : ActorMethod<[Principal, bigint], [] | [bigint]>,
   'get_boosted_by_identifier' : ActorMethod<[Principal], [] | [Boosted]>,
+  'remove_boost' : ActorMethod<[Principal], undefined>,
 }
