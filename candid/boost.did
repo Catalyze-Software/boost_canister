@@ -12,8 +12,5 @@ service : {
   boost : (principal, nat64) -> (Result);
   get_boosted_events : () -> (vec Boosted) query;
   get_boosted_groups : () -> (vec Boosted) query;
-  get_last_block_height : () -> (nat64) query;
   get_remaining_boost_time_in_seconds : (principal) -> (nat64) query;
-  get_timer_ids : () -> (vec text) query;
-  test_boost : (principal, nat64) -> (Result);
 }
