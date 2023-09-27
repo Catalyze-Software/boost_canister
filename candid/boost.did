@@ -1,13 +1,19 @@
 type Boosted = record {
+  updated_at : nat64;
   type_ : text;
   owner : principal;
-  days : nat64;
+  seconds : nat64;
   created_at : nat64;
   blockheight : nat64;
   identifier : principal;
 };
+type Result = variant { Ok : nat64; Err : text };
 service : {
-  boost : (principal, nat64) -> (opt nat64);
-  get_boosted_by_identifier : (principal) -> (opt Boosted) query;
-  remove_boost : (principal) -> ();
+  boost : (principal, nat64) -> (Result);
+  get_boosted_events : () -> (vec Boosted) query;
+  get_boosted_groups : () -> (vec Boosted) query;
+  get_last_block_height : () -> (nat64) query;
+  get_remaining_boost_time_in_seconds : (principal) -> (nat64) query;
+  get_timer_ids : () -> (vec text) query;
+  test_boost : (principal, nat64) -> (Result);
 }

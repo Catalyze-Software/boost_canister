@@ -1,77 +1,50 @@
-use std::time::Duration;
-
 use candid::Principal;
-use ic_cdk::{api::time, caller};
-use ic_cdk_macros::{query, update};
-use ic_cdk_timers::set_timer;
-use ic_scalable_misc::models::identifier_model::Identifier;
+use ic_cdk_macros::{post_upgrade, query, update};
 
 use crate::{
-    logic::{
-        ledger::Ledger,
-        store::{Store, BOOSTED},
-    },
+    logic::store::{Store, TIMERS},
     rust_declarations::types::Boosted,
 };
 
+// Restores the data from stable- to heap storage after upgrading the canister.
+#[post_upgrade]
+pub fn post_upgrade() {
+    Store::start_timers_after_upgrade();
+}
+
 #[query]
-fn get_boosted_by_identifier(identifier: Principal) -> Option<Boosted> {
-    BOOSTED.with(|p| {
-        p.borrow()
-            .iter()
-            .find(|(key, _)| key == &identifier.to_string())
-            .map(|(_, v)| v)
-    })
+fn get_boosted_groups() -> Vec<Boosted> {
+    Store::get_boosted("grp".to_string())
+}
+
+#[query]
+fn get_boosted_events() -> Vec<Boosted> {
+    Store::get_boosted("evt".to_string())
+}
+
+#[query]
+fn get_last_block_height() -> u64 {
+    Store::get_last_block_height()
 }
 
 #[update]
-async fn boost(identifier: Principal, blockheight: u64) -> Option<u64> {
-    let (_, _, kind) = Identifier::decode(&identifier);
-
-    match Ledger::validate_transaction(caller(), blockheight).await {
-        Some(amount) => {
-            let days = Store::calculate_days(amount);
-            let boosted = Boosted {
-                identifier,
-                days,
-                created_at: time(),
-                blockheight,
-                owner: caller(),
-                type_: kind,
-            };
-
-            if let Some(mut existing) = BOOSTED.with(|b| b.borrow().get(&identifier.to_string())) {
-                existing.days += days;
-                BOOSTED.with(|p| {
-                    p.borrow_mut()
-                        .insert(identifier.to_string(), existing.clone())
-                });
-                set_timer(
-                    Duration::from_secs(Store::get_seconds_from_days(existing.days)),
-                    move || remove_boost(identifier),
-                );
-                return Some(existing.days);
-            } else {
-                // Insert boost into the boosted list
-                BOOSTED.with(|p| {
-                    p.borrow_mut()
-                        .insert(identifier.to_string(), boosted.clone())
-                });
-
-                set_timer(
-                    Duration::from_secs(Store::get_seconds_from_days(days)),
-                    move || remove_boost(identifier),
-                );
-                return Some(days);
-            }
-        }
-        None => None,
-    }
+async fn boost(identifier: Principal, blockheight: u64) -> Result<u64, String> {
+    Store::boost(identifier, blockheight).await
 }
 
 #[update]
-fn remove_boost(identifier: Principal) {
-    BOOSTED.with(|p| p.borrow_mut().remove(&identifier.to_string()));
+async fn test_boost(identifier: Principal, seconds: u64) -> Result<u64, String> {
+    Store::test_boost(identifier, seconds).await
+}
+
+#[query]
+fn get_timer_ids() -> Vec<String> {
+    TIMERS.with(|t| t.borrow().values().map(|t| format!("{:?}", t)).collect())
+}
+
+#[query]
+fn get_remaining_boost_time_in_seconds(identifier: Principal) -> u64 {
+    Store::get_seconds_left_for_boosted(&identifier.to_string())
 }
 
 // Method used to save the candid interface to a file

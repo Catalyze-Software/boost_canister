@@ -8,8 +8,9 @@ use ic_stable_structures::{storable::Bound, Storable};
 #[derive(CandidType, Deserialize, Clone, Debug)]
 pub struct Boosted {
     pub identifier: Principal,
-    pub days: u64,
+    pub seconds: u64,
     pub created_at: u64,
+    pub updated_at: u64,
     pub owner: Principal,
     pub type_: String,
     pub blockheight: u64,
