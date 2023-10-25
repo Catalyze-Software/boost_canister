@@ -16,11 +16,13 @@ use super::ledger::Ledger;
 
 type Memory = VirtualMemory<DefaultMemoryImpl>;
 
+pub static CATALYZE_MULTI_SIG: &str = "fcygz-gqaaa-aaaap-abpaa-cai";
+pub static E8S_PER_DAY: u64 = 3500000;
+
 thread_local! {
     static MEMORY_MANAGER: RefCell<MemoryManager<DefaultMemoryImpl>> =
         RefCell::new(MemoryManager::init(DefaultMemoryImpl::default()));
 
-    pub static E8S_PER_DAY: u64 = 10000;
 
     pub static BOOSTED: RefCell<StableBTreeMap<String, Boosted, Memory>> = RefCell::new(
         StableBTreeMap::init(
@@ -163,8 +165,7 @@ impl Store {
     }
 
     pub fn calculate_days(tokens: Tokens) -> u64 {
-        let e8s_per_day = E8S_PER_DAY.with(|e| *e);
-        let days = ((tokens.e8s() as f64) / (e8s_per_day as f64)).round() as u64;
+        let days = ((tokens.e8s() as f64) / (E8S_PER_DAY as f64)).round() as u64;
         days
     }
 

@@ -4,6 +4,8 @@ use ic_ledger_types::{
     Tokens, DEFAULT_SUBACCOUNT, MAINNET_LEDGER_CANISTER_ID,
 };
 
+use super::store::CATALYZE_MULTI_SIG;
+
 pub struct Ledger {}
 
 impl Ledger {
@@ -28,7 +30,11 @@ impl Ledger {
                         if from != Self::principal_to_account_identifier(principal) {
                             return None;
                         }
-                        if to != Self::principal_to_account_identifier(principal) {
+                        if to
+                            != Self::principal_to_account_identifier(
+                                Principal::from_text(CATALYZE_MULTI_SIG.to_string()).unwrap(),
+                            )
+                        {
                             return None;
                         }
                         return Some(amount);
