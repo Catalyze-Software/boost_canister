@@ -13,6 +13,7 @@ export const idlFactory = ({ IDL }) => {
     'boost' : IDL.Func([IDL.Principal, IDL.Nat64], [Result], []),
     'get_boosted_events' : IDL.Func([], [IDL.Vec(Boosted)], ['query']),
     'get_boosted_groups' : IDL.Func([], [IDL.Vec(Boosted)], ['query']),
+    'get_e8s_per_day' : IDL.Func([], [IDL.Nat64], ['query']),
     'get_remaining_boost_time_in_seconds' : IDL.Func(
         [IDL.Principal],
         [IDL.Nat64],

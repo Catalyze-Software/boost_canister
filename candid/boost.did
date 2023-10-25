@@ -12,5 +12,6 @@ service : {
   boost : (principal, nat64) -> (Result);
   get_boosted_events : () -> (vec Boosted) query;
   get_boosted_groups : () -> (vec Boosted) query;
+  get_e8s_per_day : () -> (nat64) query;
   get_remaining_boost_time_in_seconds : (principal) -> (nat64) query;
 }

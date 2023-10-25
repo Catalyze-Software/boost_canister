@@ -1,7 +1,10 @@
 use candid::Principal;
 use ic_cdk_macros::{post_upgrade, query, update};
 
-use crate::{logic::store::Store, rust_declarations::types::Boosted};
+use crate::{
+    logic::store::{Store, E8S_PER_DAY},
+    rust_declarations::types::Boosted,
+};
 
 #[post_upgrade]
 pub fn post_upgrade() {
@@ -16,6 +19,11 @@ fn get_boosted_groups() -> Vec<Boosted> {
 #[query]
 fn get_boosted_events() -> Vec<Boosted> {
     Store::get_boosted("evt".to_string())
+}
+
+#[query]
+fn get_e8s_per_day() -> u64 {
+    E8S_PER_DAY
 }
 
 #[update]

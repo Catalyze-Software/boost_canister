@@ -16,5 +16,6 @@ export interface _SERVICE {
   'boost' : ActorMethod<[Principal, bigint], Result>,
   'get_boosted_events' : ActorMethod<[], Array<Boosted>>,
   'get_boosted_groups' : ActorMethod<[], Array<Boosted>>,
+  'get_e8s_per_day' : ActorMethod<[], bigint>,
   'get_remaining_boost_time_in_seconds' : ActorMethod<[Principal], bigint>,
 }
