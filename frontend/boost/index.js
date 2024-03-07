@@ -40,4 +40,4 @@ export const createActor = (canisterId, options = {}) => {
   });
 };
 
-export const boost = createActor(canisterId);
+export const boost = canisterId ? createActor(canisterId) : undefined;

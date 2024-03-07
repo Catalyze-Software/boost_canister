@@ -19,6 +19,11 @@ export const idlFactory = ({ IDL }) => {
         [IDL.Nat64],
         ['query'],
       ),
+    'read_boosted_entries' : IDL.Func(
+        [],
+        [IDL.Vec(IDL.Tuple(IDL.Text, Boosted))],
+        ['query'],
+      ),
   });
 };
 export const init = ({ IDL }) => { return []; };

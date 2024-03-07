@@ -14,4 +14,5 @@ service : {
   get_boosted_groups : () -> (vec Boosted) query;
   get_e8s_per_day : () -> (nat64) query;
   get_remaining_boost_time_in_seconds : (principal) -> (nat64) query;
+  read_boosted_entries : () -> (vec record { text; Boosted }) query;
 }
